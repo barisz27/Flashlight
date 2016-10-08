@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/prefs_general_title">
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="PREF_SHOW_RESET_TIMER_DIALOG"
+        android:title="@string/prefs_reset_dialog_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

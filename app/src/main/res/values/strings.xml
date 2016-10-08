@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Flashligth</string>
+    <string name="dialog_no_flash">Flash feature is not available on your device</string>
+    <string name="dialog_error">Error!</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="pallet_choose_color">Choose color</string>
+    <string name="pallet_ok">OK</string>
+    <string name="pallet_cancel">Cancel</string>
+    <string name="menu_screen_light">Screen Light</string>
+    <string name="menu_timer">Timer</string>
+    <string name="menu_preferences">Preferences</string>
+    <string name="screen_light_label">Screen Light</string>
+    <string name="preferences_label">Preferences</string>
+    <string name="timer_body_text">Select an interval</string>
+    <string name="timer_dialog_confirm">Do you want reset timer?</string>
+    <string name="timer_dialog_confirm_yes">Yes</string>
+    <string name="timer_dialog_confirm_no">No</string>
+    <string name="prefs_reset_dialog_title">Show timer dialog</string>
+    <string name="prefs_general_title">General</string>
+
+    <string-array name="timer_interval">
+        <item>3s</item>
+        <item>5s</item>
+        <item>15s</item>
+        <item>30s</item>
+        <item>1m</item>
+    </string-array>
+
+
+
+</resources>

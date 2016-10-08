@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_screenlight"
+        android:icon="@drawable/menu_screen"
+        app:showAsAction="ifRoom"
+        android:title="@string/menu_screen_light" />
+
+    <item
+        android:id="@+id/menu_timer"
+        android:icon="@drawable/menu_timer"
+        android:title="@string/menu_timer" />
+    <item android:id="@+id/menu_preferences"
+        android:icon="@android:drawable/ic_menu_preferences"
+        app:showAsAction="ifRoom"
+        android:title="@string/menu_preferences" />
+
+</menu>

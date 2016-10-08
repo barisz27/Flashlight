@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Flaş Işığı</string>
+    <string name="dialog_error">Hata!</string>
+    <string name="dialog_no_flash">Cihazınızda flaş özelliği bulunmuyor</string>
+    <string name="menu_screen_light">Ekran Işığı</string>
+    <string name="dialog_ok">OK</string>
+    <string name="pallet_cancel">İptal</string>
+    <string name="pallet_choose_color">Renk seç</string>
+    <string name="pallet_ok">Tamam</string>
+    <string name="screen_light_label">Ekran Işığı</string>
+    <string name="dialog_cancel">İptal</string>
+    <string name="menu_timer">Zamanlayıcı</string>
+    <string name="timer_body_text">Zaman aralığı seçin</string>
+
+    <string-array name="timer_interval">
+        <item>3sn</item>
+        <item>5sn</item>
+        <item>15sn</item>
+        <item>30sn</item>
+        <item>1dk</item>
+    </string-array>
+    <string name="timer_dialog_confirm">Yeniden ayarlamak ister misiniz?</string>
+    <string name="timer_dialog_confirm_no">Hayır</string>
+    <string name="timer_dialog_confirm_yes">Evet</string>
+    <string name="menu_preferences">Tercihler</string>
+    <string name="preferences_label">Tercihler</string>
+    <string name="prefs_reset_dialog_title">Zamanlayıcı diyoloğu göster</string>
+    <string name="prefs_general_title">Genel</string>
+</resources>

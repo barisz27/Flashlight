@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.comxa.mysqlandroidproject.flashlight.Preferences;
 import com.comxa.mysqlandroidproject.flashlight.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {

@@ -2,7 +2,6 @@ package com.comxa.mysqlandroidproject.flashlight.activities;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -10,12 +9,9 @@ import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ActionBarOverlayLayout;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -141,11 +137,7 @@ public class ScreenLight extends AppCompatActivity {
     }
 
     private void saveFirstBrightness() {
-        try {
-            curBrightnessValue = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
+            curBrightnessValue = android.provider.Settings.System.getInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS,-1);
     }
 
     private void initVariables() {
@@ -169,7 +161,8 @@ public class ScreenLight extends AppCompatActivity {
 
         int r = randomNum.nextInt(265);
         int g = randomNum.nextInt(265);
-        int b = randomNum.nextInt(265);*/
+        int b = randomNum.nextInt(265);
+        */
 
         ColorFilter filter = new LightingColorFilter(Color.rgb(0, 0, 0), Color.rgb(0, 0, 0));
         if (myBackIcon != null && myPowerIcon != null) {

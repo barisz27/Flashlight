@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mPaused = false;
     private boolean isTmrStopped = true;
 
-    // static değikenler
+    // static variables
     private static int sTime;
     private static int bTime;
     private static boolean isTimer = false;

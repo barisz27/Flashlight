@@ -11,6 +11,7 @@
     <item
         android:id="@+id/menu_timer"
         android:icon="@drawable/menu_timer"
+        app:showAsAction="ifRoom"
         android:title="@string/menu_timer" />
     <item android:id="@+id/menu_preferences"
         android:icon="@android:drawable/ic_menu_preferences"

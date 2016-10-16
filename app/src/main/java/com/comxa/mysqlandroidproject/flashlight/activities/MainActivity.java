@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.comxa.mysqlandroidproject.flashlight.R;
 
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mFlash = true;
     private boolean mON = false;
     private boolean mPaused = false;
+    private boolean mRotated = false;
     private boolean isTmrStopped = true;
 
     // static variables
@@ -74,6 +77,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+            mRotated = true;
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            // Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+            mRotated = true;
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         // açma kapama butonuna tıklandığında ele alınacak olaylar...
         if (mFlash) {
@@ -104,26 +121,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-        mPaused = true;
-        if (isTimer && !isTmrStopped) {
-            stopTimer();
+        if (!mRotated) {
+            mPaused = true;
+            if (isTimer && !isTmrStopped) {
+                stopTimer();
+            }
+            uiChanges();
+            mON = false;
+            if (camera != null && getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
+                camera.release();
+                camera = null;
+            }
         }
-        uiChanges();
-        mON = false;
-        if (camera != null && getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
-            camera.release();
-            camera = null;
-        }
+        mRotated = false;
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        mPaused = false;
-        if (camera == null && getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
-            camera = Camera.open();
-            camParamaters = camera.getParameters();
+        if (!mRotated) {
+            mPaused = false;
+            if (camera == null && getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
+                camera = Camera.open();
+                camParamaters = camera.getParameters();
+            }
         }
+        mRotated = false;
     }
 
     private void checkFlashAvailableOrNot() {
@@ -331,6 +354,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 try {
+
                     while (!isInterrupted()) {
                         Thread.sleep(125);
                         runOnUiThread(new Runnable() {
@@ -340,6 +364,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (isTimer) {
                                     if (0 < sTime && sTime <= 3) {
                                         tvTime.setTextColor(Color.RED);
+
                                     } else if (sTime == 0) {
                                         tvTime.setTextColor(Color.BLACK);
                                     }

@@ -24,7 +24,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.comxa.mysqlandroidproject.flashlight.R;
 
@@ -278,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onLongClick(View v) {
         if (!mON)
-        showDialog();
+            showDialog();
         return false;
     }
 

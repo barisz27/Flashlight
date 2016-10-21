@@ -18,6 +18,7 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Camera.Parameters camParamaters;
     private ImageView ivFlashlight;
     private RelativeLayout mRoot;
-    private TextView tvTime;
+    private static TextView tvTime;
     private boolean mFlash = false;
     private boolean mON = false;
     private boolean mPaused = false;
@@ -57,8 +58,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         onFinishInflate();
-        requestRuntimePermission();
-        updateTextView();
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M){
+            requestRuntimePermission();
+        } else {
+            mFlash = checkFlashAvailableOrNot();
+        }
+
     }
 
     @Override
@@ -326,6 +332,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         isTimer = true;
                     }
                     bTime = sTime;
+                    tvTime.setVisibility(View.VISIBLE);
+                    tvTime.setText(String.valueOf(sTime));
                     dialogInterface.dismiss();
                 }
             });
@@ -353,55 +361,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     }
                     sTime--;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isTimer) {
+                                if (0 < sTime && sTime <= 3) {
+                                    tvTime.setTextColor(Color.RED);
+
+                                } else if (sTime == 0) {
+                                    tvTime.setTextColor(Color.BLACK);
+                                }
+                                tvTime.setText(String.valueOf(sTime));
+                                if (sTime == 0 && mON) {
+                                    startOrStopCamera();
+                                    uiChanges();
+                                    mON = false;
+                                    isTimer = false;
+                                    isTmrStopped = true;
+
+                                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                                    if (prefs.getBoolean("PREF_SHOW_RESET_TIMER_DIALOG", true))
+                                        showReTimerDialog();
+                                }
+                            }
+                        }
+                    });
                 }
             }
 
         };
         timer.start();
-    }
-
-    private void updateTextView() {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                try {
-
-                    while (!isInterrupted()) {
-                        Thread.sleep(125);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // update TextView here!
-                                if (isTimer) {
-                                    if (0 < sTime && sTime <= 3) {
-                                        tvTime.setTextColor(Color.RED);
-
-                                    } else if (sTime == 0) {
-                                        tvTime.setTextColor(Color.BLACK);
-                                    }
-                                    tvTime.setVisibility(View.VISIBLE);
-                                    tvTime.setText(String.valueOf(sTime));
-                                    if (sTime == 0 && mON) {
-                                        startOrStopCamera();
-                                        uiChanges();
-                                        mON = false;
-                                        isTimer = false;
-                                        isTmrStopped = true;
-
-                                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                                        if (prefs.getBoolean("PREF_SHOW_RESET_TIMER_DIALOG", true))
-                                            showReTimerDialog();
-                                    }
-                                }
-                            }
-                        });
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        t.start();
     }
 
     private void showReTimerDialog() {
@@ -413,6 +402,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialogInterface, int i) {
                         sTime = bTime;
                         isTimer = true;
+                        tvTime.setText(String.valueOf(sTime));
                     }
                 })
                 .setNegativeButton(getResources().getString(R.string.timer_dialog_confirm_no), new DialogInterface.OnClickListener() {
@@ -425,30 +415,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void requestRuntimePermission(){
-        // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
                     Manifest.permission.CAMERA)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
             } else {
-
-                // No explanation needed, we can request the permission.
-
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.CAMERA},
                         MY_PERMISSIONS_REQUEST_CAMERA);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         }
     }
@@ -458,22 +434,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_CAMERA: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mFlash = checkFlashAvailableOrNot();
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
+
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 }
